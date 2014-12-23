@@ -21,36 +21,40 @@ def about():
 
 @app.route('/today')
 def today():
-    checks = Mvc.query.filter_by(
-        datedoc=datetime.now().strftime('%Y-%m-%d'),
+    print('Entered at: {}'.format(datetime.now().strftime('%Y-%m-%d-%H:%M:%S')))
+    checks = Mvc.query.filter(
+        # Mvc.datedoc >= datetime.now().strftime('%Y-%m-%d'),
+        Mvc.datedoc == datetime.now().strftime('%Y-%m-%d'),
         # datedoc='2014-08-08',
-        tipdoc=8,
-        kodskl=1,
-        bodydoc=1,
-        nomwork=1
+        Mvc.tipdoc==8,
+        Mvc.kodskl==1,
+        Mvc.bodydoc==1,
+        Mvc.nomwork==1
     ).all()
 
     strResult = "<b>Total sum: {} ({}) uah - {} checks</b> <br>".format(
         round(
-            Mvc.query.with_entities(func.sum(Mvc.sumcom)).filter_by(
-                    datedoc=datetime.now().strftime('%Y-%m-%d'),
+            Mvc.query.with_entities(func.sum(Mvc.sumcom)).filter(
+                    # Mvc.datedoc >= datetime.now().strftime('%Y-%m-%d'),
+                    Mvc.datedoc == datetime.now().strftime('%Y-%m-%d'),
                     # datedoc='2014-08-08',
-                    tipdoc=8,
-                    kodskl=1,
-                    bodydoc=1,
-                    nomwork=1
+                    Mvc.tipdoc==8,
+                    Mvc.kodskl==1,
+                    Mvc.bodydoc==1,
+                    Mvc.nomwork==1
                 ).scalar(),
             2
         ),
         round(
-            # Purchasing sum without NDS
-            Mvc.query.with_entities(func.sum(Mvc.sumskl)).filter_by(
-                    datedoc=datetime.now().strftime('%Y-%m-%d'),
+            # Purchasing sum without NDS OR clear profit
+            Mvc.query.with_entities(func.sum(Mvc.sumskl)).filter(
+                    # Mvc.datedoc >= datetime.now().strftime('%Y-%m-%d'),
+                    Mvc.datedoc == datetime.now().strftime('%Y-%m-%d'),
                     # datedoc='2014-08-08',
-                    tipdoc=8,
-                    kodskl=1,
-                    bodydoc=1,
-                    nomwork=1
+                    Mvc.tipdoc==8,
+                    Mvc.kodskl==1,
+                    Mvc.bodydoc==1,
+                    Mvc.nomwork==1
                 ).scalar(),
             2
         ),
@@ -68,6 +72,7 @@ def today():
         len(checks)
     )
 
+    print('Fetching details')
     profit = 0
 
     for check in checks:
@@ -93,6 +98,7 @@ def today():
 
         # break
 
+    print('Ready at: {}'.format(datetime.now().strftime('%Y-%m-%d-%H:%M:%S')))
     strResult += "<b>{}</b>".format(profit)
 
     return strResult
