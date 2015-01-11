@@ -1,4 +1,16 @@
-function todayChecksController($scope, $http, $interval) {
+var todayApp = angular.module('dashboard.today', ['ngRoute']);
+
+todayApp.config(function($routeProvider) {
+    $routeProvider
+
+        // route for the revenue page
+        .when('/today', {
+            templateUrl : '/static/html/dashboard/today.html',
+            controller  : 'todayController'
+        })
+});
+
+function todayController($scope, $http, $interval) {
     $scope.summary = {};
     $scope.checks = {};
     $scope.revenue = {value:"revenue", buttonStyle: "btn btn-info"};
@@ -37,11 +49,11 @@ function todayChecksController($scope, $http, $interval) {
             {
                 console.log("getDetailsForCheck: for ", id);
                 $http.get("/checks/detail/" + id)
-                .success(function(response) {
-                    console.log("===>", response)
-                    $scope.checks[id].detail = response;
-                    $scope.checks[id].isVisible = true
-                })
+                    .success(function(response) {
+                        console.log("===>", response)
+                        $scope.checks[id].detail = response;
+                        $scope.checks[id].isVisible = true
+                    })
             }
             else
                 $scope.checks[id].isVisible = true
@@ -56,10 +68,10 @@ function todayChecksController($scope, $http, $interval) {
         date_range = today + "/" + today;
         $scope.revenue.value = "retrieving"
         $http.get("/revenue/" + date_range)
-        .success(function(response) {
-            $scope.revenue.value = parseFloat(response);
-        $scope.revenue.buttonStyle = "btn btn-success";
-        })
+            .success(function(response) {
+                $scope.revenue.value = parseFloat(response);
+                $scope.revenue.buttonStyle = "btn btn-success";
+            })
     }
 }
 

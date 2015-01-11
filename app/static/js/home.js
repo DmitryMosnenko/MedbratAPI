@@ -1,6 +1,6 @@
-var mainApp = angular.module('mainApp', ['ngRoute']);
+var homeApp = angular.module('homeApp', ['ngRoute']);
 
-mainApp.config(function($routeProvider) {
+homeApp.config(function($routeProvider) {
     $routeProvider
 
         // route for the home page

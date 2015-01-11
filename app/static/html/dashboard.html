@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="dashboardApp">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,9 +19,10 @@
     <link href="/static/css/today.css" rel="stylesheet">
 
     <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+    <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-route.js"></script>
   </head>
 
-  <body ng-app="" ng-controller="todayChecksController">
+  <body>
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
@@ -50,8 +51,8 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Today's sales <span class="sr-only">(current)</span></a></li>
-            <li><a href="#">Reports</a></li>
+            <li class="active"><a href="#today">Today's sales <span class="sr-only">(current)</span></a></li>
+            <li><a href="#revenue">Revenue</a></li>
             <li><a href="#">Analytics</a></li>
             <li><a href="#">Export</a></li>
           </ul>
@@ -63,57 +64,16 @@
             <li><a href="">More navigation</a></li>
           </ul>
         </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Dashboard - Today - {{ summary.day }}</h1>
-          <h2 class="sub-header">
-              {{ summary.total_income.toFixed(2) }} uah - {{ summary.checks_number }} checks
-              <button ng-class="revenue.buttonStyle" type="button" ng-click="getRevenue()">
-                  {{ revenue.value.toFixed(2) ? revenue.value.toFixed(2): revenue.value }}
-              </button>
-          </h2>
 
-          <div class="row btn list-group-item">
-            <div class="col-md-1">#</div>
-            <div class="col-md-1">Time</div>
-            <div class="col-md-1">Income</div>
-          </div>
 
-          <div class="row row-item list-group-item btn btn-default"
-               ng-repeat="check in checks" ng-click="getDetailsForCheck(check.id)"
-               ng-class="{selected:row-selected}">
-            <div class="row">
-              <div class="col-md-1">
-                <span class="caret"></span>
-                {{ check.id }}
-              </div>
-              <div class="col-md-1">{{ check.at }}</div>
-              <div class="col-md-1">{{ check.checkTotalSum.toFixed(2) }}</div>
-            </div>
-            <div ng-show="check.isVisible">
-              <div class="row list-group-item">
-                <div class="col-xs-6 list-group-column">Name</div>
-                <div class="col-xs-1 list-group-column">Quantity</div>
-                <div class="col-xs-1 list-group-column">Dimension</div>
-                <div class="col-xs-1 list-group-column">Sale Price</div>
-                <div class="col-xs-1 list-group-column">Discount</div>
-                <div class="col-xs-1 list-group-column">Original Price</div>
-                <div class="col-xs-1 list-group-column">Procurement Price</div>
-              </div>
-              <div class="row list-group-item" ng-repeat="detail in check.detail">
-                <div class="col-xs-6 list-group-column">{{ detail.name }}</div>
-                <div class="col-xs-1 list-group-column">{{ detail.quantity.toFixed(2) }}</div>
-                <div class="col-xs-1 list-group-column">{{ detail.dimension }}</div>
-                <div class="col-xs-1 list-group-column">{{ detail.retailPrice.toFixed(2) }}</div>
-                <div class="col-xs-1 list-group-column">{{ detail.discount.toFixed(2) }}%</div>
-                <div class="col-xs-1 list-group-column">{{ detail.retailPriceWithoutDiscount.toFixed(2) }}</div>
-                <div class="col-xs-1 list-group-column">{{ detail.procurementPrice.toFixed(2) }}</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div ng-view></div>
+
+
       </div>
     </div>
 
-  <script src="/static/js/todayChecks.js"></script>
+  <script src="/static/js/dashboard.js"></script>
+  <script src="/static/js/dashboard/today.js"></script>
+  <script src="/static/js/dashboard/revenue.js"></script>
   </body>
 </html>
