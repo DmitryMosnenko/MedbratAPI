@@ -65,7 +65,12 @@
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <h1 class="page-header">Dashboard - Today - {{ summary.day }}</h1>
-          <h2 class="sub-header">{{ summary.total_income.toFixed(2) }} uah - {{ summary.checks_number }} checks</h2>
+          <h2 class="sub-header">
+              {{ summary.total_income.toFixed(2) }} uah - {{ summary.checks_number }} checks
+              <button ng-class="revenue.buttonStyle" type="button" ng-click="getRevenue()">
+                  {{ revenue.value.toFixed(2) ? revenue.value.toFixed(2): revenue.value }}
+              </button>
+          </h2>
 
           <div class="row btn list-group-item">
             <div class="col-md-1">#</div>

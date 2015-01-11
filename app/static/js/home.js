@@ -52,7 +52,7 @@ function mainController($scope, $http, $interval) {
             });
     }; getAndFillScope();
 
-    var intervalPromise = $interval(getAndFillScope, 5000);
+    var intervalPromise = $interval(getAndFillScope, 50000);
     $scope.$on('$destroy', function () { $interval.cancel(intervalPromise); });
 }
 

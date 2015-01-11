@@ -1,14 +1,10 @@
 function todayChecksController($scope, $http, $interval) {
     $scope.summary = {};
     $scope.checks = {};
+    $scope.revenue = {value:"revenue", buttonStyle: "btn btn-info"};
 
     getAndFillScope = function() {
-        var d = new Date();
-        var curr_date = d.getDate();
-        var curr_month = d.getMonth() + 1;
-        var curr_year = d.getFullYear();
-
-        today =  curr_year + "-" + curr_month + "-" + curr_date;
+        today =  getTodayDate();
         date_range = today + "/" + today;
         $scope.summary.day = today;
 
@@ -18,7 +14,11 @@ function todayChecksController($scope, $http, $interval) {
             });
         $http.get("/checks/count/" + date_range)
             .success(function(response) {
-                $scope.summary.checks_number = parseFloat(response);
+                if ( $scope.summary.checks_number != parseFloat(response) ) {
+                    $scope.summary.checks_number = parseFloat(response);
+                    if (typeof $scope.revenue.value == 'number')
+                        $scope.revenue.buttonStyle = "btn btn-warning";
+                }
             });
         $http.get("/checks/summary/" + date_range)
             .success(function(response) {
@@ -26,7 +26,7 @@ function todayChecksController($scope, $http, $interval) {
             });
     }; getAndFillScope();
 
-    var intervalPromise = $interval(getAndFillScope, 5000);
+    var intervalPromise = $interval(getAndFillScope, 50000);
     $scope.$on('$destroy', function () { $interval.cancel(intervalPromise); });
 
     $scope.getDetailsForCheck = function(id) {
@@ -50,6 +50,31 @@ function todayChecksController($scope, $http, $interval) {
             $scope.checks[id].isVisible = false
         }
     };
+
+    $scope.getRevenue = function() {
+        today =  getTodayDate();
+        date_range = today + "/" + today;
+        $http.get("/revenue/" + date_range)
+        .success(function(response) {
+            $scope.revenue.value = parseFloat(response);
+        $scope.revenue.buttonStyle = "btn btn-success";
+        })
+    }
+}
+
+
+
+// FixMe: put in common file
+
+
+function getTodayDate() {
+    var d = new Date();
+    var curr_date = d.getDate();
+    var curr_month = d.getMonth() + 1;
+    var curr_year = d.getFullYear();
+
+    today =  curr_year + "-" + curr_month + "-" + curr_date;
+    return today;
 }
 
 /**
