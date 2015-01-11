@@ -54,6 +54,7 @@ function todayChecksController($scope, $http, $interval) {
     $scope.getRevenue = function() {
         today =  getTodayDate();
         date_range = today + "/" + today;
+        $scope.revenue.value = "retrieving"
         $http.get("/revenue/" + date_range)
         .success(function(response) {
             $scope.revenue.value = parseFloat(response);
