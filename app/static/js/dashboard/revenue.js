@@ -2,9 +2,9 @@
  * Created by AMID on 1/11/15.
  */
 
-var revenueApp = angular.module('dashboard.revenue', ['ngRoute']);
+var app = angular.module('dashboardApp');
 
-revenueApp.config(function($routeProvider) {
+app.config(function($routeProvider) {
     $routeProvider
 
         // route for the revenue page
@@ -15,15 +15,16 @@ revenueApp.config(function($routeProvider) {
 });
 
 
-function revenueController($scope, $http, $interval) {
+app.controller('revenueController', ['$scope', '$rootScope', '$http', '$interval',
+    function($scope, $rootScope, $http, $interval) {
     $scope.summary = {};
     $scope.checks = {};
     $scope.revenue = {value:"revenue", buttonStyle: "btn btn-info"};
 
     getAndFillScope = function() {
-        today =  getTodayDate();
-        date_range = today + "/" + today;
-        $scope.summary.day = today;
+        date_range = $rootScope.dateBegin + "/" + $rootScope.dateEnd;
+        $scope.summary.day = $rootScope.dateBegin === $rootScope.dateEnd ? $rootScope.dateBegin :
+            $rootScope.dateBegin + "  -  " + $rootScope.dateEnd;
 
         $http.get("/incomes/" + date_range)
             .success(function(response) {
@@ -69,8 +70,7 @@ function revenueController($scope, $http, $interval) {
     };
 
     $scope.getRevenue = function() {
-        today =  getTodayDate();
-        date_range = today + "/" + today;
+        date_range = $rootScope.dateBegin + "/" + $rootScope.dateEnd;
         $scope.revenue.value = "retrieving"
         $http.get("/revenue/" + date_range)
             .success(function(response) {
@@ -78,4 +78,4 @@ function revenueController($scope, $http, $interval) {
                 $scope.revenue.buttonStyle = "btn btn-success";
             })
     }
-}
+}]);

@@ -1,6 +1,6 @@
-var todayApp = angular.module('dashboard.today', ['ngRoute']);
+var app = angular.module('dashboardApp');
 
-todayApp.config(function($routeProvider) {
+app.config(function($routeProvider) {
     $routeProvider
 
         // route for the revenue page
@@ -10,15 +10,17 @@ todayApp.config(function($routeProvider) {
         })
 });
 
-function todayController($scope, $http, $interval) {
+
+app.controller('todayController', ['$scope', '$rootScope', '$http', '$interval',
+    function($scope, $rootScope, $http, $interval) {
     $scope.summary = {};
     $scope.checks = {};
     $scope.revenue = {value:"revenue", buttonStyle: "btn btn-info"};
 
     getAndFillScope = function() {
-        today =  getTodayDate();
-        date_range = today + "/" + today;
-        $scope.summary.day = today;
+        date_range = $rootScope.dateBegin + "/" + $rootScope.dateEnd;
+        $scope.summary.day = $rootScope.dateBegin === $rootScope.dateEnd ? $rootScope.dateBegin :
+            $rootScope.dateBegin + "  -  " + $rootScope.dateEnd;
 
         $http.get("/incomes/" + date_range)
             .success(function(response) {
@@ -64,8 +66,7 @@ function todayController($scope, $http, $interval) {
     };
 
     $scope.getRevenue = function() {
-        today =  getTodayDate();
-        date_range = today + "/" + today;
+        date_range = $rootScope.dateBegin + "/" + $rootScope.dateEnd;
         $scope.revenue.value = "retrieving"
         $http.get("/revenue/" + date_range)
             .success(function(response) {
@@ -73,22 +74,7 @@ function todayController($scope, $http, $interval) {
                 $scope.revenue.buttonStyle = "btn btn-success";
             })
     }
-}
-
-
-
-// FixMe: put in common file
-
-
-function getTodayDate() {
-    var d = new Date();
-    var curr_date = d.getDate();
-    var curr_month = d.getMonth() + 1;
-    var curr_year = d.getFullYear();
-
-    today =  curr_year + "-" + curr_month + "-" + curr_date;
-    return today;
-}
+}]);
 
 /**
  * Overwrites obj1's values with obj2's and adds obj2's if non existent in obj1
