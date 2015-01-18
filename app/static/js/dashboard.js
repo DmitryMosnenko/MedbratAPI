@@ -8,10 +8,14 @@ dashboardApp.run(function($rootScope) {
     $rootScope.dateBegin = $rootScope.dateEnd = getTodayDate();
 });
 
-dashboardApp.controller('todayController', ['$rootScope',
-    function($rootScope) {
-        $rootScope.dateBegin = getTodayDate();
-        $rootScope.dateEnd = getTodayDate();
+
+dashboardApp.controller('globalMenuController', ['$rootScope', '$scope',
+    function($rootScope, $scope) {
+        $scope.dateRangeUpdated = function() {
+            $rootScope.dateBegin = $scope.dateBegin;
+            $rootScope.dateEnd = $scope.dateEnd;
+            $rootScope.$broadcast('date-range-changed');
+        };
 }]);
 
 

@@ -44,6 +44,10 @@ app.controller('revenueController', ['$scope', '$rootScope', '$http', '$interval
             });
     }; getAndFillScope();
 
+    $scope.$on("date-range-changed", function(event, args) {
+        getAndFillScope();
+    });
+
     var intervalPromise = $interval(getAndFillScope, 50000);
     $scope.$on('$destroy', function () { $interval.cancel(intervalPromise); });
 
