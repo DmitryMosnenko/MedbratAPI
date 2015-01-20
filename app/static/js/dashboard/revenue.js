@@ -19,7 +19,7 @@ app.controller('revenueController', ['$scope', '$rootScope', '$http', '$interval
     function($scope, $rootScope, $http, $interval) {
     $scope.summary = {};
     $scope.checks = {};
-    $scope.revenue = {value:"revenue", buttonStyle: "btn btn-info"};
+    $scope.revenue = {value:"revenue", buttonStyle: "btn btn-info btn-row"};
     $scope.items = [];
 
     var fillItems = function() {
@@ -32,7 +32,7 @@ app.controller('revenueController', ['$scope', '$rootScope', '$http', '$interval
         for (d = dB; d <= dE; d.setDate(dB.getDate() + 1)) {
             $scope.items[d] = {};
             $scope.items[d].date = new Date(d);
-            $scope.items[d].revenue = {value:"revenue", buttonStyle: "btn btn-info"};
+            $scope.items[d].revenue = {value:"revenue", buttonStyle: "btn btn-info btn-row"};
             $scope.items.push($scope.items[d]);
         }
 
@@ -55,6 +55,14 @@ app.controller('revenueController', ['$scope', '$rootScope', '$http', '$interval
                 .success(function(response) {
                     item.rebateDaySum = parseFloat(response);
                 });
+            $http.get("/checks/count/" + date_range)
+                .success(function(response) {
+                    item.checksNumber = parseFloat(response);
+                });
+            $http.get("/checks/avg/" + date_range)
+                .success(function(response) {
+                    item.avgCheck = parseFloat(response);
+                });
         });
     }; fillItems();
 
@@ -66,7 +74,7 @@ app.controller('revenueController', ['$scope', '$rootScope', '$http', '$interval
         $http.get("/revenue/" + date_range)
             .success(function(response) {
                 $scope.items[day].revenue.value = parseFloat(response);
-                $scope.items[day].revenue.buttonStyle = "btn btn-success";
+                $scope.items[day].revenue.buttonStyle = "btn btn-success btn-row";
             })
     };
 

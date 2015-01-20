@@ -2,18 +2,31 @@
     background: #f5f5f5 !important;
 }
 
+.row-item {
+    padding: 0px; !important;
+}
+
 .row-item:nth-of-type(odd) {
     background: #e0e0e0 !important;
 }
 
 .row-item:hover {
     background: #AA9A66 !important;
+    color: white;
 }
 
 .list-group-column {
     white-space: pre-wrap !important;
 }
 
+.list-group-item-header {
+    margin-bottom: 30px;
+}
+
 .badge-lg {
     font-size: 30px !important;
+}
+
+.btn-row {
+    padding: 0px;
 }
