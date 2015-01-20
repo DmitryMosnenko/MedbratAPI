@@ -4,7 +4,7 @@ app.config(function($routeProvider) {
     $routeProvider
 
         // route for the revenue page
-        .when('/today', {
+        .when('/', {
             templateUrl : '/static/html/dashboard/today.html',
             controller  : 'todayController'
         })
@@ -15,7 +15,7 @@ app.controller('todayController', ['$scope', '$rootScope', '$http', '$interval',
     function($scope, $rootScope, $http, $interval) {
     $scope.summary = {};
     $scope.checks = {};
-    $scope.revenue = {value:"revenue", buttonStyle: "btn btn-info"};
+    $scope.revenue = {value:"revenue", buttonStyle: "btn btn-lg btn-info btn-block"};
 
     getAndFillScope = function() {
         date_range = $rootScope.dateBegin + "/" + $rootScope.dateEnd;
@@ -31,12 +31,8 @@ app.controller('todayController', ['$scope', '$rootScope', '$http', '$interval',
                 if ( $scope.summary.checks_number != parseFloat(response) ) {
                     $scope.summary.checks_number = parseFloat(response);
                     if (typeof $scope.revenue.value == 'number')
-                        $scope.revenue.buttonStyle = "btn btn-warning";
+                        $scope.revenue.buttonStyle = "btn btn-lg btn-warning btn-block";
                 }
-            });
-        $http.get("/checks/summary/" + date_range)
-            .success(function(response) {
-                $scope.checks = merge_options(response, $scope.checks);
             });
     }; getAndFillScope();
 
@@ -47,35 +43,13 @@ app.controller('todayController', ['$scope', '$rootScope', '$http', '$interval',
     var intervalPromise = $interval(getAndFillScope, 50000);
     $scope.$on('$destroy', function () { $interval.cancel(intervalPromise); });
 
-    $scope.getDetailsForCheck = function(id) {
-        if (!$scope.checks[id].isVisible ||
-            ($scope.checks[id].isVisible === false))
-        {
-            if (!$scope.checks[id].detail)
-            {
-                console.log("getDetailsForCheck: for ", id);
-                $http.get("/checks/detail/" + id)
-                    .success(function(response) {
-                        console.log("===>", response)
-                        $scope.checks[id].detail = response;
-                        $scope.checks[id].isVisible = true
-                    })
-            }
-            else
-                $scope.checks[id].isVisible = true
-        }
-        else{
-            $scope.checks[id].isVisible = false
-        }
-    };
-
     $scope.getRevenue = function() {
         date_range = $rootScope.dateBegin + "/" + $rootScope.dateEnd;
         $scope.revenue.value = "retrieving"
         $http.get("/revenue/" + date_range)
             .success(function(response) {
                 $scope.revenue.value = parseFloat(response);
-                $scope.revenue.buttonStyle = "btn btn-success";
+                $scope.revenue.buttonStyle = "btn btn-lg btn-success btn-block";
             })
     }
 }]);

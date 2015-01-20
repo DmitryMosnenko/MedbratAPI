@@ -13,3 +13,7 @@
 .list-group-column {
     white-space: pre-wrap !important;
 }
+
+.badge-lg {
+    font-size: 30px !important;
+}

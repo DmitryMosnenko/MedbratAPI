@@ -20,66 +20,58 @@ app.controller('revenueController', ['$scope', '$rootScope', '$http', '$interval
     $scope.summary = {};
     $scope.checks = {};
     $scope.revenue = {value:"revenue", buttonStyle: "btn btn-info"};
+    $scope.items = [];
 
-    getAndFillScope = function() {
-        date_range = $rootScope.dateBegin + "/" + $rootScope.dateEnd;
+    var fillItems = function() {
+        $scope.items = [];
         $scope.summary.day = $rootScope.dateBegin === $rootScope.dateEnd ? $rootScope.dateBegin :
             $rootScope.dateBegin + "  -  " + $rootScope.dateEnd;
 
-        $http.get("/incomes/" + date_range)
-            .success(function(response) {
-                $scope.summary.total_income = parseFloat(response);
-            });
-        $http.get("/checks/count/" + date_range)
-            .success(function(response) {
-                if ( $scope.summary.checks_number != parseFloat(response) ) {
-                    $scope.summary.checks_number = parseFloat(response);
-                    if (typeof $scope.revenue.value == 'number')
-                        $scope.revenue.buttonStyle = "btn btn-warning";
-                }
-            });
-        $http.get("/checks/summary/" + date_range)
-            .success(function(response) {
-                $scope.checks = merge_options(response, $scope.checks);
-            });
-    }; getAndFillScope();
-
-    $scope.$on("date-range-changed", function(event, args) {
-        getAndFillScope();
-    });
-
-    var intervalPromise = $interval(getAndFillScope, 50000);
-    $scope.$on('$destroy', function () { $interval.cancel(intervalPromise); });
-
-    $scope.getDetailsForCheck = function(id) {
-        if (!$scope.checks[id].isVisible ||
-            ($scope.checks[id].isVisible === false))
-        {
-            if (!$scope.checks[id].detail)
-            {
-                console.log("getDetailsForCheck: for ", id);
-                $http.get("/checks/detail/" + id)
-                    .success(function(response) {
-                        console.log("===>", response)
-                        $scope.checks[id].detail = response;
-                        $scope.checks[id].isVisible = true
-                    })
-            }
-            else
-                $scope.checks[id].isVisible = true
+        var dB = new Date($rootScope.dateBegin);
+        var dE = new Date($rootScope.dateEnd);
+        for (d = dB; d <= dE; d.setDate(dB.getDate() + 1)) {
+            $scope.items[d] = {};
+            $scope.items[d].date = new Date(d);
+            $scope.items[d].revenue = {value:"revenue", buttonStyle: "btn btn-info"};
+            $scope.items.push($scope.items[d]);
         }
-        else{
-            $scope.checks[id].isVisible = false
-        }
-    };
 
-    $scope.getRevenue = function() {
-        date_range = $rootScope.dateBegin + "/" + $rootScope.dateEnd;
-        $scope.revenue.value = "retrieving"
+        angular.forEach($scope.items, function(item) {
+            var date_range = new Date(item.date).toLocaleFormat('%Y-%m-%d') + "/"
+                + new Date(item.date).toLocaleFormat('%Y-%m-%d');
+            $http.get("/incomes/" + date_range)
+                .success(function(response) {
+                    item.totalDaySum = parseFloat(response);
+                });
+            $http.get("/incomes/cash/" + date_range)
+                .success(function(response) {
+                    item.cashDaySum = parseFloat(response);
+                });
+            $http.get("/incomes/terminal/" + date_range)
+                .success(function(response) {
+                    item.terminalDaySum = parseFloat(response);
+                });
+            $http.get("/incomes/rebate/" + date_range)
+                .success(function(response) {
+                    item.rebateDaySum = parseFloat(response);
+                });
+        });
+    }; fillItems();
+
+
+    $scope.getRevenue = function(day) {
+        dayNormalized = day.toLocaleFormat('%Y-%m-%d');
+        date_range = dayNormalized + "/" + dayNormalized;
+        $scope.items[day].revenue.value = "retrieving";
         $http.get("/revenue/" + date_range)
             .success(function(response) {
-                $scope.revenue.value = parseFloat(response);
-                $scope.revenue.buttonStyle = "btn btn-success";
+                $scope.items[day].revenue.value = parseFloat(response);
+                $scope.items[day].revenue.buttonStyle = "btn btn-success";
             })
-    }
+    };
+
+
+    $scope.$on("date-range-changed", function(event, args) {
+        fillItems();
+    });
 }]);

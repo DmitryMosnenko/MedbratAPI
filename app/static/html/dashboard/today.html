@@ -1,48 +1,21 @@
-<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-    <h1 class="page-header">Dashboard - {{ summary.day }}</h1>
+<div class="col-sm-2  col-md-offset-2">
+    <h1 class="page-header">{{ summary.day }}</h1>
     <h2 class="sub-header">
-        {{ summary.total_income.toFixed(2) }} uah - {{ summary.checks_number }} checks
-        <button ng-class="revenue.buttonStyle" type="button" ng-click="getRevenue()">
-            {{ revenue.value.toFixed(2) ? revenue.value.toFixed(2): revenue.value }}
-        </button>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <span class="badge badge-lg">{{ summary.total_income.toFixed(2) }}</span>
+                UAH
+            </li>
+            <li class="list-group-item">
+                <span class="badge badge-lg">{{ summary.checks_number }}</span>
+                Checks
+            </li>
+            <li class="list-group-item">
+                <button ng-class="revenue.buttonStyle" type="button" ng-click="getRevenue()">
+                    {{ revenue.value.toFixed(2) ? revenue.value.toFixed(2): revenue.value }}
+                </button>
+            </li>
+        </ul>
     </h2>
-
-    <div class="row btn list-group-item">
-        <div class="col-md-1">#</div>
-        <div class="col-md-1">Time</div>
-        <div class="col-md-1">Income</div>
-    </div>
-
-    <div class="row row-item list-group-item btn btn-default"
-         ng-repeat="check in checks" ng-click="getDetailsForCheck(check.id)"
-         ng-class="{selected:row-selected}">
-        <div class="row">
-            <div class="col-md-1">
-                <span class="caret"></span>
-                {{ check.id }}
-            </div>
-            <div class="col-md-1">{{ check.at }}</div>
-            <div class="col-md-1">{{ check.checkTotalSum.toFixed(2) }}</div>
-        </div>
-        <div ng-show="check.isVisible">
-            <div class="row list-group-item">
-                <div class="col-xs-6 list-group-column">Name</div>
-                <div class="col-xs-1 list-group-column">Quantity</div>
-                <div class="col-xs-1 list-group-column">Dimension</div>
-                <div class="col-xs-1 list-group-column">Sale Price</div>
-                <div class="col-xs-1 list-group-column">Discount</div>
-                <div class="col-xs-1 list-group-column">Original Price</div>
-                <div class="col-xs-1 list-group-column">Procurement Price</div>
-            </div>
-            <div class="row list-group-item" ng-repeat="detail in check.detail">
-                <div class="col-xs-6 list-group-column">{{ detail.name }}</div>
-                <div class="col-xs-1 list-group-column">{{ detail.quantity.toFixed(2) }}</div>
-                <div class="col-xs-1 list-group-column">{{ detail.dimension }}</div>
-                <div class="col-xs-1 list-group-column">{{ detail.retailPrice.toFixed(2) }}</div>
-                <div class="col-xs-1 list-group-column">{{ detail.discount.toFixed(2) }}%</div>
-                <div class="col-xs-1 list-group-column">{{ detail.retailPriceWithoutDiscount.toFixed(2) }}</div>
-                <div class="col-xs-1 list-group-column">{{ detail.procurementPrice.toFixed(2) }}</div>
-            </div>
-        </div>
     </div>
 </div>
