@@ -4,15 +4,20 @@
 
 .row-item {
     padding: 0px; !important;
+    cursor: pointer;
 }
 
 .row-item:nth-of-type(odd) {
-    background: #e0e0e0 !important;
+    background: #e0e0e0;
 }
 
 .row-item:hover {
     background: #AA9A66 !important;
     color: white;
+}
+
+.active {
+    background: #337AB7 !important;
 }
 
 .list-group-column {
@@ -23,10 +28,19 @@
     margin-bottom: 30px;
 }
 
+.checks-fixed-column {
+    height: 100%;
+    overflow: auto;
+}
+
 .badge-lg {
     font-size: 30px !important;
 }
 
 .btn-row {
     padding: 0px;
+}
+
+.parent-height-100 {
+    height: calc(100% - 10px);
 }

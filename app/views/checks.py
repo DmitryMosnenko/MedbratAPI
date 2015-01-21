@@ -29,7 +29,8 @@ def checks(detailed, date_begin, date_end):
         return "Unknown required details or no"
 
     checks = Mvc.query.filter(
-        Mvc.datedoc == datetime.now().strftime('%Y-%m-%d'),
+        Mvc.datedoc >= date_begin,
+        Mvc.datedoc <= date_end,
         Mvc.tipdoc == 8, Mvc.kodskl == 1, Mvc.bodydoc == 1, Mvc.nomwork == 1
     ).all()
 

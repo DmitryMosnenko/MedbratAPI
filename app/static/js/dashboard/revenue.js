@@ -18,7 +18,6 @@ app.config(function($routeProvider) {
 app.controller('revenueController', ['$scope', '$rootScope', '$http', '$interval',
     function($scope, $rootScope, $http, $interval) {
     $scope.summary = {};
-    $scope.checks = {};
     $scope.revenue = {value:"revenue", buttonStyle: "btn btn-info btn-row"};
     $scope.items = [];
 

@@ -27,8 +27,8 @@ dashboardApp.controller('globalMenuSwitcherController', ['$scope', '$location',
                               EndPoint  : 'revenue',
                               Text      : 'Revenue'
                             }, {
-                              EndPoint  : 'today',
-                              Text      : 'Sales'
+                              EndPoint  : 'checks',
+                              Text      : 'Checks'
                             }];
 
         $scope.isMenuItemActive = function (page) {
