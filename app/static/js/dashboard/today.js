@@ -51,6 +51,10 @@ app.controller('todayController', ['$scope', '$rootScope', '$http', '$interval',
                 $scope.revenue.value = parseFloat(response);
                 $scope.revenue.buttonStyle = "btn btn-lg btn-success btn-block";
             })
+	    .error(function(data, status) {
+		$scope.revenue.value = 'ERROR';
+		$scope.revenue.buttonStyle = "btn btn-lg btn-danger btn-block";
+	    })
     }
 }]);
 

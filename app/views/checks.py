@@ -31,7 +31,7 @@ def checks(detailed, date_begin, date_end):
     checks = Mvc.query.filter(
         Mvc.datedoc >= date_begin,
         Mvc.datedoc <= date_end,
-        Mvc.tipdoc == 8, Mvc.kodskl == 1, Mvc.bodydoc == 1, Mvc.nomwork == 1
+        Mvc.tipdoc == 8, Mvc.kodskl == 1, Mvc.nomwork == 1
     ).all()
 
     result = {}
@@ -55,7 +55,7 @@ def checks_count(date_begin, date_end):
     result = Mvc.query.filter(
         Mvc.datedoc >= date_begin,
         Mvc.datedoc <= date_end,
-        Mvc.tipdoc == 8, Mvc.kodskl == 1, Mvc.bodydoc == 1, Mvc.nomwork == 1
+        Mvc.tipdoc == 8, Mvc.kodskl == 1, Mvc.nomwork == 1
     ).count()
 
     return str(result)
@@ -72,7 +72,7 @@ def checks_avg(date_begin, date_end):
     result = Mvc.query.with_entities(func.avg(Mvc.sumcom)).filter(
         Mvc.datedoc >= date_begin,
         Mvc.datedoc <= date_end,
-        Mvc.tipdoc == 8, Mvc.kodskl == 1, Mvc.bodydoc == 1, Mvc.nomwork == 1
+        Mvc.tipdoc == 8, Mvc.kodskl == 1, Mvc.nomwork == 1
     ).scalar()
 
     return str(result)

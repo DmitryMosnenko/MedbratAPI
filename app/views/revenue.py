@@ -20,23 +20,19 @@ def net_profit(date_begin, date_end):
     except ValueError:
         return "Unknown value"
 
-    checks = Mvc.query.filter(
-        Mvc.datedoc >= date_begin,
-        Mvc.datedoc <= date_end,
-        Mvc.tipdoc == 8, Mvc.kodskl == 1, Mvc.bodydoc == 1, Mvc.nomwork == 1
-    ).all()
-
     result = 0
 
-    for check in checks:
-        details = db.session.query(Name, Mv, Cennik).\
-            filter(
-                Name.kod == Cennik.namekod,
-                Cennik.kod == Mv.kodmat,
-                Mv.krossnomer == check.krossnom
-            ).all()
-        for detail in details:
-            result += (float(detail.Mv.cenarasx) * float(detail.Mv.kolvo)) - ((float(detail.Cennik.priceprixod) + ((float(detail.Cennik.priceprixod)/100) * float(detail.Cennik.procincnds))) * float(detail.Mv.kolvo))
+    details_new = db.session.query(Name, Mv, Cennik, Mvc).\
+        filter(
+            Name.kod == Cennik.namekod,
+            Cennik.kod == Mv.kodmat,
+            Mvc.datedoc >= date_begin,
+            Mvc.datedoc <= date_end,
+            Mvc.tipdoc == 8, Mvc.kodskl == 1, Mvc.nomwork == 1,
+            Mv.krossnomer == Mvc.krossnom
+        ).all()
+    for detail in details_new:
+        result += (float(detail.Mv.cenarasx) * float(detail.Mv.kolvo)) - ((float(detail.Cennik.priceprixod) + ((float(detail.Cennik.priceprixod)/100) * float(detail.Cennik.procincnds))) * float(detail.Mv.kolvo))
 
     return str(result)
 

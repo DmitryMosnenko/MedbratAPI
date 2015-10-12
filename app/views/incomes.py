@@ -20,10 +20,9 @@ def incomes_total(date_begin, date_end):
     result = Mvc.query.with_entities(func.sum(Mvc.sumcom)).filter(
         Mvc.datedoc >= date_begin,
         Mvc.datedoc <= date_end,
-        Mvc.tipdoc == 8, Mvc.kodskl == 1, Mvc.bodydoc == 1, Mvc.nomwork == 1
+        Mvc.tipdoc == 8, Mvc.kodskl == 1, Mvc.nomwork == 1
     ).scalar()
 
-    # return str(result)
     return json.dumps(result)
 
 
@@ -39,10 +38,9 @@ def incomes_cash(date_begin, date_end):
         Mvc.datedoc >= date_begin,
         Mvc.datedoc <= date_end,
         Mvc.tipsaledoc == 0,
-        Mvc.tipdoc == 8, Mvc.kodskl == 1, Mvc.bodydoc == 1, Mvc.nomwork == 1
+        Mvc.tipdoc == 8, Mvc.kodskl == 1, Mvc.nomwork == 1
     ).scalar()
 
-    # return str(result)
     return json.dumps(result)
 
 
@@ -58,10 +56,9 @@ def incomes_terminal(date_begin, date_end):
         Mvc.datedoc >= date_begin,
         Mvc.datedoc <= date_end,
         Mvc.tipsaledoc == 1,
-        Mvc.tipdoc == 8, Mvc.kodskl == 1, Mvc.bodydoc == 1, Mvc.nomwork == 1
+        Mvc.tipdoc == 8, Mvc.kodskl == 1, Mvc.nomwork == 1
     ).scalar()
 
-    # return str(result)
     return json.dumps(result)
 
 
@@ -76,8 +73,7 @@ def incomes_rebate(date_begin, date_end):
     result = Mv.query.with_entities(func.sum(Mv.kolvo * Mv.cenaunskidka - Mv.kolvo * Mv.cenarasx)).filter(
         Mv.datadoc >= date_begin,
         Mv.datadoc <= date_end,
-        Mv.tipdoc == 8, Mv.kodsklada == 1, Mv.bodydoc == 1  #, Mv.nomwork == 1
+        Mv.tipdoc == 8, Mv.kodsklada == 1
     ).scalar()
 
-    # return str(result)
     return json.dumps(float(result))
