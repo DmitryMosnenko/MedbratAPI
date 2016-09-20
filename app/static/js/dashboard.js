@@ -4,8 +4,8 @@
 
 var dashboardApp = angular.module('dashboardApp', ['ngRoute']);
 
-dashboardApp.run(function($rootScope) {
-    $rootScope.dateBegin = $rootScope.dateEnd = new Date().toLocaleFormat('%Y-%m-%d');
+dashboardApp.run(function($rootScope, $filter) {
+    $rootScope.dateBegin = $rootScope.dateEnd = $filter('date')(new Date(),'yyyy-MM-dd');
 });
 
 

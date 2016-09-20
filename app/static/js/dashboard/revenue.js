@@ -15,8 +15,8 @@ app.config(function($routeProvider) {
 });
 
 
-app.controller('revenueController', ['$scope', '$rootScope', '$http', '$interval',
-    function($scope, $rootScope, $http, $interval) {
+app.controller('revenueController', ['$scope', '$rootScope', '$http', '$interval', '$filter',
+    function($scope, $rootScope, $http, $interval, $filter) {
     $scope.summary = {};
     $scope.revenue = {value:"revenue", buttonStyle: "btn btn-info btn-row"};
     $scope.items = [];
@@ -29,15 +29,15 @@ app.controller('revenueController', ['$scope', '$rootScope', '$http', '$interval
         var dB = new Date($rootScope.dateBegin);
         var dE = new Date($rootScope.dateEnd);
         for (d = dB; d <= dE; d.setDate(dB.getDate() + 1)) {
-            $scope.items[d] = {};
-            $scope.items[d].date = new Date(d);
-            $scope.items[d].revenue = {value:"revenue", buttonStyle: "btn btn-info btn-row"};
-            $scope.items.push($scope.items[d]);
+	    var date = $filter('date')(new Date(d),'yyyy-MM-dd');
+            $scope.items[date] = {};
+            $scope.items[date].date = date;
+            $scope.items[date].revenue = {value:"revenue", buttonStyle: "btn btn-info btn-row"};
+            $scope.items.push($scope.items[date]);
         }
 
         angular.forEach($scope.items, function(item) {
-            var date_range = new Date(item.date).toLocaleFormat('%Y-%m-%d') + "/"
-                + new Date(item.date).toLocaleFormat('%Y-%m-%d');
+	    var date_range = item.date + "/" + item.date;
             $http.get("/incomes/" + date_range)
                 .success(function(response) {
                     item.totalDaySum = parseFloat(response);
@@ -67,7 +67,7 @@ app.controller('revenueController', ['$scope', '$rootScope', '$http', '$interval
 
 
     $scope.getRevenue = function(day) {
-        dayNormalized = day.toLocaleFormat('%Y-%m-%d');
+	dayNormalized = $filter('date')(day,'yyyy-MM-dd');
         date_range = dayNormalized + "/" + dayNormalized;
         $scope.items[day].revenue.value = "retrieving";
         $http.get("/revenue/" + date_range)

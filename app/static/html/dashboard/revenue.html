@@ -15,7 +15,7 @@
             </h4>
         </div>
         <div class="row row-item" ng-repeat="item in items | orderBy:'date':true">
-            <div class="col-md-1">{{ item.date.toLocaleFormat('%Y-%m-%d') }}</div>
+            <div class="col-md-1">{{ item.date }}</div>
             <div class="col-md-1">{{ item.checksNumber }}</div>
             <div class="col-md-1">{{ item.avgCheck.toFixed(2) }}</div>
             <div class="col-md-1">{{ item.rebateDaySum.toFixed(2) }}</div>

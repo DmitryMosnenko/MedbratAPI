@@ -15,8 +15,8 @@ app.config(function($routeProvider) {
 });
 
 
-app.controller('checksController', ['$scope', '$rootScope', '$http', '$interval',
-    function($scope, $rootScope, $http, $interval) {
+app.controller('checksController', ['$scope', '$rootScope', '$http', '$interval', '$filter',
+    function($scope, $rootScope, $http, $interval, $filter) {
     $scope.summary = {};
     $scope.revenue = {value:"revenue", buttonStyle: "btn btn-info btn-row"};
     $scope.items = [];
@@ -30,12 +30,12 @@ app.controller('checksController', ['$scope', '$rootScope', '$http', '$interval'
         var dB = new Date($rootScope.dateBegin);
         var dE = new Date($rootScope.dateEnd);
         for (d = dB; d <= dE; d.setDate(dB.getDate() + 1)) {
-            var date_range = new Date(d).toLocaleFormat('%Y-%m-%d') + "/"
-                + new Date(d).toLocaleFormat('%Y-%m-%d');
+	    var date_range = $filter('date')(new Date(d),'yyyy-MM-dd') + "/"
+		+ $filter('date')(new Date(d),'yyyy-MM-dd');
             $http.get("/checks/summary/" + date_range)
                 .success(function (response) {
                     angular.forEach(response, function(responseItem) {
-                        responseItem.date = d.toLocaleFormat('%Y-%m-%d');
+			responseItem.date = $filter('date')(d,'yyyy-MM-dd');
                         $scope.items.push(responseItem);
                     });
                 });
