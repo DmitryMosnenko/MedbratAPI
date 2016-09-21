@@ -62,7 +62,7 @@ app.controller('checksController', ['$scope', '$rootScope', '$http', '$interval'
         if ($scope.lastSelected) {
             $scope.lastSelected.isActive = '';
         }
-        this.isActive = 'active';
+        this.isActive = 'selected';
         $scope.lastSelected = this;
     };
 }]);

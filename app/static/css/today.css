@@ -16,7 +16,7 @@
     color: white;
 }
 
-.active {
+.selected {
     background: #337AB7 !important;
 }
 
